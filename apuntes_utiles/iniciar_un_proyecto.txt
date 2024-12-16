@@ -1,0 +1,7 @@
+npm --version
+
+npm init    ///para inicializar node en cualquier proyecto
+
+npm install
+
+npm 

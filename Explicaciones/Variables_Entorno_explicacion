@@ -1,0 +1,140 @@
+En **Node.js**, las **variables de entorno** son un mecanismo para almacenar configuraciones importantes fuera del código fuente. Estas variables son especialmente útiles para gestionar datos sensibles o configuraciones específicas para diferentes entornos (desarrollo, prueba, producción).
+
+---
+
+## **¿Qué son las variables de entorno?**
+Son valores almacenados en el entorno del sistema operativo o en un archivo separado. Estos valores pueden ser **accedidos desde tu aplicación** en tiempo de ejecución.
+
+**Ejemplo de uso**:  
+- Almacenar claves API.  
+- Configurar el puerto del servidor.  
+- Identificar el entorno (desarrollo, producción).  
+
+---
+
+## **¿Por qué son importantes?**
+
+1. **Seguridad**: No guardes datos sensibles (como contraseñas o claves API) directamente en el código fuente. Usa variables de entorno para evitar exponer información privada en repositorios públicos.
+   
+2. **Flexibilidad**: Cambias configuraciones (como el puerto o la base de datos) sin modificar el código.
+
+3. **Control por entorno**: Puedes configurar tu aplicación para que use variables diferentes en **desarrollo**, **pruebas** y **producción**.
+
+---
+
+## **Cómo acceder a las variables de entorno en Node.js**
+
+Node.js proporciona el objeto **`process.env`** para acceder a las variables de entorno.
+
+### **Ejemplo básico**
+```javascript
+// Acceder a una variable de entorno llamada PORT
+const port = process.env.PORT || 3000;
+
+console.log(`El servidor se ejecuta en el puerto ${port}`);
+```
+
+- Si la variable `PORT` está definida, se usa ese valor.  
+- Si no, se usa el valor por defecto (`3000` en este caso).
+
+---
+
+## **Cómo definir variables de entorno**
+
+1. **Desde el sistema operativo**
+   - En **Linux/Mac**:  
+     ```bash
+     PORT=4000 node app.js
+     ```
+
+   - En **Windows (CMD)**:  
+     ```cmd
+     set PORT=4000 && node app.js
+     ```
+
+2. **Usando un archivo `.env`** (Recomendado)
+   - Crea un archivo llamado `.env` en el directorio de tu proyecto.
+   - Define las variables:
+     ```
+     PORT=4000
+     DB_HOST=localhost
+     API_KEY=12345abcd
+     ```
+
+   - Usa la biblioteca **dotenv** para cargar estas variables.
+
+---
+
+## **Uso de dotenv para variables de entorno**
+
+La librería `dotenv` es una herramienta popular para cargar las variables desde un archivo `.env`.
+
+### **Pasos:**
+
+1. **Instalar dotenv**
+   ```bash
+   npm install dotenv
+   ```
+
+2. **Crear un archivo `.env`**
+   ```
+   PORT=4000
+   DB_USER=admin
+   DB_PASS=secret
+   ```
+
+3. **Cargar las variables en tu aplicación**
+   ```javascript
+   require('dotenv').config();
+
+   const port = process.env.PORT || 3000;
+   const dbUser = process.env.DB_USER;
+   const dbPass = process.env.DB_PASS;
+
+   console.log(`Servidor en el puerto ${port}`);
+   console.log(`Usuario DB: ${dbUser}, Contraseña: ${dbPass}`);
+   ```
+
+### **Resultado:**
+Las variables del archivo `.env` estarán disponibles en `process.env`.
+
+---
+
+## **Buenas prácticas al usar variables de entorno**
+
+1. **No subas el archivo `.env` a repositorios públicos**:  
+   Usa un archivo `.gitignore` para excluirlo:
+   ```
+   .env
+   ```
+
+2. **Define valores por defecto en tu código**:  
+   Siempre incluye un valor por defecto si la variable de entorno no está definida:
+   ```javascript
+   const port = process.env.PORT || 3000;
+   ```
+
+3. **Usa nombres descriptivos y en mayúsculas**:  
+   Ejemplo:
+   ```
+   DB_HOST
+   API_KEY
+   NODE_ENV
+   ```
+
+4. **Distingue entre entornos**:  
+   Usa diferentes archivos `.env` para cada entorno (desarrollo, pruebas, producción). Ejemplo:
+   ```
+   .env.development
+   .env.production
+   ```
+
+---
+
+## **Resumen**
+- **Variables de entorno** son útiles para almacenar configuraciones y datos sensibles fuera del código.
+- Usa el objeto **`process.env`** para acceder a ellas en Node.js.
+- La librería **dotenv** simplifica el uso de variables en un archivo `.env`.
+- Mantén tu archivo `.env` privado y bien organizado.
+
+¿Te gustaría un ejemplo más avanzado o una configuración específica? 😊
