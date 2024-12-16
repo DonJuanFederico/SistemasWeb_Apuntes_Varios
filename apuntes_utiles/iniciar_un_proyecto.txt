@@ -2,6 +2,9 @@ npm --version
 
 npm init    ///para inicializar node en cualquier proyecto
 
-npm install
+npm install  /// instalar las dependencias del package.json
 
-npm 
+node ['archivo principal'] ///como saber cual es el archivo principal:  el archivo que este en la variable main
+
+
+node --watch  [ruta y archivo]
