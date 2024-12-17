@@ -8,3 +8,11 @@ node ['archivo principal'] ///como saber cual es el archivo principal:  el archi
 
 
 node --watch  [ruta y archivo]
+
+
+pmp install standard -D
+
+
+
+
+tabular:shift + alt + f
