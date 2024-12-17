@@ -1,0 +1,34 @@
+    <% if(!cookie){%>
+    <div id="cookie-banner" class="cookie-banner">
+      <h2>Uso de cookies</h4>
+      <p>Nos vemos oblgados a pedirte el uso de cookies ba bla bla </p> 
+      <button id="accept-cookies" class="cookie-btn">Accept</button>
+      <button id="reject-cookies" class="cookie-btn">Denied</button>
+    </div>
+    <%}%>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const cookieBanner = document.getElementById('cookie-banner');
+      const acceptButton = document.getElementById('accept-cookies')
+      const rejectButton = document.getElementById('reject-cookies')
+
+      fetch('/check-cookies')
+          .then((response) => response.json())
+          .then((data) => {
+              if (!data.cookiesAccepted) {
+                  cookieBanner.style.display = 'block';
+              }
+          });
+
+      acceptButton.addEventListener('click', () => {
+          fetch('./accept-cookies', { method: 'POST' })
+              .then(() => {
+                  cookieBanner.style.display = 'none';
+              })
+      });
+      rejectButton.addEventListener('click', () => {
+          window.location.href = 'https://www.google.com';
+      });
+
+    });
+  </script>
