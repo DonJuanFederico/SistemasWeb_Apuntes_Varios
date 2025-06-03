@@ -1,7 +1,7 @@
 me tienes q decir los atributos q hay en la base de datos de peliculas para poder meterselo en lo de la foto
 y me tienes q poner lo q dice la segunda hoja q la primera la tengo entera ya
 y si puedes pasame una foto de las carpetas y lo q hay dentro de cada fichero, en plan pones 
-fich1: y copias y pegas todo para pasarselo al chat
+fich1: y copias y pegas todo para pasarselo al chat 
 
 RESPUESTA CHAT:
 INES- esto tiene q ser en el archivo.yaml, la cosa es, q  poster, director, genre y rating son opcionales y dependen de lo q tengas en la bd, tienes q cambiarlos o decirme cuales son para q tenga sentido y no sea algo q no tiene nada q ver con la bd q os da
