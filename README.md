@@ -11,10 +11,37 @@
 me hace falta con lo ultimo que te he papasado, qque te lo voy a volver a pasar aqui, las consultas.
 apartado 1: indicar el titulo y el numero de premios de la pelicula con mas premios (wins dentro de awaRard
 
+db.movies.find(
+  { "awards.wins": { $exists: true } },
+  { title: 1, "awards.wins": 1 }
+).sort({ "awards.wins": -1 }).limit(1);
+
+
+
 papartado 2.  en la coleccion movies. mostrar un listado con las diferrentes clasificaciones de edad que existen (rated). para cada una de ellos muestre el numero de documentos que tienen esa clasificacion y ordenelos de mas documetnos a menos.
+
+
+db.movies.aggregate([
+  { $group: { _id: "$rated", total: { $sum: 1 } } },
+  { $sort: { total: -1 } }
+]);
+
 
 apartado 3: en la coleccion movies, muestre el num umuestre un listado con los diferentes generos de peliculas que existen (genres.
 ap 4: en la coleccion movies indicar el numero de peliculas que hay entre los años 1970 y 1985 (incluidos) amobs extremos.
+
+
+db.movies.aggregate([
+  { $unwind: "$genres" },
+  { $group: { _id: "$genres", total: { $sum: 1 } } },
+  { $sort: { total: -1 } }
+]);
+
+Si solo quieres los nombres de géneros sin contar, reemplaza el group por:
+
+{ $group: { _id: "$genres" } }
+
+
 
 
 
