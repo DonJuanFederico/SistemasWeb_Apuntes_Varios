@@ -129,3 +129,93 @@ No lo hemos implementado aún. La línea que tú mencionaste (jestOpenAPI(...)) 
 ¿Te ayudo con otro endpoint o parte del enunciado que no hemos tocado aún?
 
 Dime tú por dónde seguimos.
+
+
+
+
+
+
+
+VALE ESTO ES AQUI: components/shcemas/Movie: 
+q es lo de la primera hoja q me has pasado por foto, pero juan me hacen falta mas cosas, q no tenog el enunciado entero ni nada, me tienes q decir q mas falta 
+
+    Movie:
+      type: object
+      required:
+        - title
+        - year
+        - type
+      properties:
+        _id:
+          $ref: "#/components/schemas/ID"
+        title:
+          type: string
+        year:
+          type: integer
+        type:
+          type: string
+          description: Movie type, e.g., "movie"
+        plot:
+          type: string
+        fullplot:
+          type: string
+        rated:
+          type: string
+        runtime:
+          type: integer
+        genres:
+          type: array
+          items:
+            type: string
+        cast:
+          type: array
+          items:
+            type: string
+        languages:
+          type: array
+          items:
+            type: string
+        countries:
+          type: array
+          items:
+            type: string
+        released:
+          type: string
+          format: date-time
+        directors:
+          type: array
+          items:
+            type: string
+        writers:
+          type: array
+          items:
+            type: string
+        poster:
+          type: string
+          format: uri
+        awards:
+          type: object
+          properties:
+            wins:
+              type: integer
+            nominations:
+              type: integer
+            text:
+              type: string
+        imdb:
+          type: object
+          properties:
+            rating:
+              type: number
+            votes:
+              type: integer
+            id:
+              type: integer
+        tomatoes:
+          type: object
+          additionalProperties: true
+        lastupdated:
+          type: string
+        num_mflix_comments:
+          type: integer
+      additionalProperties: true
