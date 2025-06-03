@@ -219,3 +219,34 @@ q es lo de la primera hoja q me has pasado por foto, pero juan me hacen falta ma
         num_mflix_comments:
           type: integer
       additionalProperties: true
+
+
+
+ESTO LE PONE A LU SU CHAT, CAMBIALO 
+❗️3. Detalle a corregir: código de respuesta POST
+
+En el yaml, el POST /movie responde con 200. Debes cambiarlo a 201 para cumplir con REST:
+
+post:
+  tags:
+    - movie
+  summary: Add a new movie
+  operationId: addMovie
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: '#/components/schemas/Movie'
+  responses:
+    '201':
+      description: Created
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Movie'
+    '400':
+      description: Invalid input
+Y cambia también tu router.post para que devuelva 201:
+
+res.status(201).json(result.ops?.[0] || movie);
