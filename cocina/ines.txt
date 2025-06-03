@@ -109,3 +109,23 @@ router.get('/:id', async (req, res) => {
 
 
 dime q mas falta porfa y a q hora acabas tecnicamente
+
+
+ESTO ES LO Q ME DICE EL CHAT Q FALTA:
+❌ FALTA
+4. Montar Swagger para visualizar el OpenAPI
+No lo hemos hecho todavía. Podemos hacerlo con swagger-ui-express y sirviendo movies.schema.yaml.
+
+5. Tests automáticos con Jest y jest-openapi
+No lo hemos implementado aún. La línea que tú mencionaste (jestOpenAPI(...)) se usaría aquí.
+
+👉 ¿Qué te gustaría que hagamos ahora?
+¿Montamos Swagger UI para ver la documentación?
+
+¿Te doy un test Jest con jest-openapi para probar /movies?
+
+¿Revisamos cómo levantar app.js entero para unir todo?
+
+¿Te ayudo con otro endpoint o parte del enunciado que no hemos tocado aún?
+
+Dime tú por dónde seguimos.
