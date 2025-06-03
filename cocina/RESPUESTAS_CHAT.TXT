@@ -1,0 +1,248 @@
+🗂️ Paso 1: Crea un nuevo archivo de rutas
+📁 api/routes/stats.js
+
+const express = require('express');
+const router = express.Router();
+const dbo = require('../db/conn');
+
+// 1. Película con más premios
+router.get('/top-awards', async (req, res) => {
+  try {
+    const db = dbo.getDb();
+    const result = await db.collection('movies')
+      .find({ "awards.wins": { $exists: true } })
+      .sort({ "awards.wins": -1 })
+      .project({ title: 1, "awards.wins": 1 })
+      .limit(1)
+      .toArray();
+    res.status(200).send(result[0]);
+  } catch (err) {
+    res.status(500).send({ error: "Error fetching top-award movie" });
+  }
+});
+
+// 2. Clasificaciones por edad (rated)
+router.get('/ratings', async (req, res) => {
+  try {
+    const db = dbo.getDb();
+    const result = await db.collection('movies').aggregate([
+      { $match: { rated: { $exists: true, $ne: "" } } },
+      { $group: { _id: "$rated", total: { $sum: 1 } } },
+      { $sort: { total: -1 } }
+    ]).toArray();
+    res.status(200).send(result);
+  } catch (err) {
+    res.status(500).send({ error: "Error fetching ratings" });
+  }
+});
+
+// 3. Géneros y conteo
+router.get('/genres', async (req, res) => {
+  try {
+    const db = dbo.getDb();
+    const result = await db.collection('movies').aggregate([
+      { $unwind: "$genres" },
+      { $group: { _id: "$genres", total: { $sum: 1 } } },
+      { $sort: { total: -1 } }
+    ]).toArray();
+    res.status(200).send(result);
+  } catch (err) {
+    res.status(500).send({ error: "Error fetching genres" });
+  }
+});
+
+// 4. Número de películas entre dos años
+router.get('/count-by-year', async (req, res) => {
+  try {
+    const db = dbo.getDb();
+    const from = parseInt(req.query.from);
+    const to = parseInt(req.query.to);
+
+    if (isNaN(from) || isNaN(to)) {
+      return res.status(400).send({ error: "Missing or invalid 'from' and 'to' query params" });
+    }
+
+    const count = await db.collection('movies').countDocuments({
+      year: { $gte: from, $lte: to }
+    });
+
+    res.status(200).send({ from, to, count });
+  } catch (err) {
+    res.status(500).send({ error: "Error counting movies by year" });
+  }
+});
+
+module.exports = router;
+
+
+
+🛠️ Paso 2: Cargar la nueva ruta en app.js
+Abre tu app.js y añade esta línea (si no está ya):
+
+
+const statsRouter = require('./routes/stats');
+app.use('/stats', statsRouter);
+
+
+
+Y SI TE LO PIDE, PUEDES ACTUALIZAR EL YAML PARA DOCUMENTAR LOS ENDPOINTS
+
+📄 Añade esto en paths: del YAML
+
+  /stats/top-awards:
+    get:
+      summary: Obtener la película con más premios
+      tags:
+        - Estadísticas
+      responses:
+        '200':
+          description: Película con más premios
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  title:
+                    type: string
+                  awards:
+                    type: object
+                    properties:
+                      wins:
+                        type: integer
+        '500':
+          description: Error interno
+
+  /stats/ratings:
+    get:
+      summary: Listado de clasificaciones por edad y número de películas
+      tags:
+        - Estadísticas
+      responses:
+        '200':
+          description: Clasificaciones de edad
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    _id:
+                      type: string
+                      description: Clasificación (por ejemplo, "PG-13")
+                    total:
+                      type: integer
+                      description: Número de películas con esa clasificación
+        '500':
+          description: Error interno
+
+  /stats/genres:
+    get:
+      summary: Listado de géneros de películas y número de películas por género
+      tags:
+        - Estadísticas
+      responses:
+        '200':
+          description: Géneros y conteo
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    _id:
+                      type: string
+                      description: Nombre del género
+                    total:
+                      type: integer
+                      description: Número de películas
+        '500':
+          description: Error interno
+
+  /stats/count-by-year:
+    get:
+      summary: Número de películas entre dos años dados
+      tags:
+        - Estadísticas
+      parameters:
+        - in: query
+          name: from
+          schema:
+            type: integer
+          required: true
+          description: Año inicial (inclusive)
+        - in: query
+          name: to
+          schema:
+            type: integer
+          required: true
+          description: Año final (inclusive)
+      responses:
+        '200':
+          description: Número de películas encontradas
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  from:
+                    type: integer
+                  to:
+                    type: integer
+                  count:
+                    type: integer
+        '400':
+          description: Parámetros inválidos
+        '500':
+          description: Error interno
+
+
+
+💡 Consejo: Si usas Swagger UI, este bloque quedará organizado dentro de una sección llamada Estadísticas.
+
+
+
+✅ 7. Instalar y configurar Swagger UI
+🧩 Paso 1: Instala Swagger UI
+Desde la raíz del proyecto:
+
+npm install swagger-ui-express yamljs
+
+🧩 Paso 2: En app.js, añade esto al principio (después de tus require):
+
+const swaggerUi = require('swagger-ui-express');
+const YAML = require('yamljs');
+const path = require('path');
+const swaggerDocument = YAML.load(path.join(__dirname, 'schema/movies.schema.yaml'));
+
+
+🧩 Paso 3: Monta Swagger en /docs
+En app.js, debajo de tus rutas:
+
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
+
+🚀 Resultado final
+Ahora puedes entrar a:
+
+http://localhost:3000/docs
+
+y ver toda la API documentada gráficamente con Swagger UI.
+
+✅ TODO COMPLETO
+Ya está todo lo que pediste:
+
+API REST funcional
+
+MongoDB conectado
+
+Consultas estadísticas
+
+Especificación OpenAPI completa
+
+Swagger UI montado
+
+
+DIME SI FALTA ALGO MAS Q ME TENGO Q IR PORFA
+
