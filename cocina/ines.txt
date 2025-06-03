@@ -250,3 +250,14 @@ post:
 Y cambia también tu router.post para que devuelva 201:
 
 res.status(201).json(result.ops?.[0] || movie);
+
+
+
+
+
+MIRA TAMBIEN ESTO IMPORTANTE JUAN Y DIME A Q HORA ACABA EL EXAMEN 
+
+4. Sugerencias finales
+
+Cambia todas las rutas a /api/v1/movie si tu BASE_URL en test es http://localhost:3000/api/v1. Si no, ajusta BASE_URL a http://localhost:3000/movie.
+El test usa /peliculas y el backend usa /movie, asegúrate de que ambos estén alineados.
