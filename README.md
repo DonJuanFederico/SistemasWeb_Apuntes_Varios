@@ -42,6 +42,11 @@ Si solo quieres los nombres de géneros sin contar, reemplaza el group por:
 { $group: { _id: "$genres" } }
 
 
+Número de películas entre los años 1970 y 1985 (incluidos):
+db.movies.countDocuments({
+  year: { $gte: 1970, $lte: 1985 }
+});
+
 
 
 
